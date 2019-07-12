@@ -58,6 +58,28 @@ actionRoutes.post('/:id', validateId, validateAction, async (req, res) => {
         res.status(500).json({ error: "The action could not be removed" })
     }
 
+});
+
+actionRoutes.put('/:id', validateId, validateAction, async (req,res) => {
+    const { description, notes, completed } = req.body;
+    const action = {
+        description,
+        notes,
+        completed
+    }
+    const actions = await Action.get(req.params.id);
+
+    try {
+
+        if(actions) {
+            const updatedAction = await Action.update(req.params.id, action);
+            res.status(201).json({ message: "action updated successfully", updatedAction: { ...action} });
+        } else {
+            res.status(404).json({ message: `The action with the specified ID ${req.params.id} does not exist.` });
+        }
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Please action could not be updated. Try again"  });
+      }
 })
 
 export default actionRoutes;

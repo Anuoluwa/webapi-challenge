@@ -85,4 +85,28 @@ projectRoutes.get("/:id/actions", validateId, async (req, res) => {
 
 })
 
+projectRoutes.put('/:id', validateId, validateProject, async (req,res) => {
+    const { name, description, completed } = req.body;
+    const project = {
+      name,
+      description,
+      completed
+    };
+
+    const projects = await Project.get(req.params.id);
+ 
+    try {
+
+        if(projects) {
+            const updatedProject = await Project.update(req.params.id, project);
+            res.status(201).json({ message: "project updated successfully", updatedProject: { ...project} });
+        } else {
+            res.status(404).json({ message: `The project with the specified ID ${req.params.id} does not exist.` })
+
+        }
+    } catch (error) {
+        res.status(500).json({ errorMessage: "Please project could not be updated. Try again"  });
+      }
+})
+
 export default projectRoutes;
