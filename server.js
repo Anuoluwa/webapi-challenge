@@ -7,6 +7,7 @@ const server = express();
 server.use(express.json());
 server.use(logger);
 
+
 server.use('/api', routes);
 
 server.get('/', (req, res) => {
