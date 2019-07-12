@@ -70,4 +70,19 @@ projectRoutes.get("/:id/actions", validateId, async (req, res) => {
     }
   });
 
+  projectRoutes.delete('/:id', validateId, async (req, res) => {
+    const item = await Project.get(req.params.id);
+    try {
+        if(item) {
+            const project = await Project.remove(req.params.id);
+            res.status(200).json({message: "This project has been deleted successfully",  project: item })
+        } else {
+            res.status(404).json({ message: `The project with the specified ID ${req.params.id} does not exist.` })
+        }
+    } catch(error) {
+        res.status(500).json({ error: "The project could not be removed" })
+    }
+
+})
+
 export default projectRoutes;

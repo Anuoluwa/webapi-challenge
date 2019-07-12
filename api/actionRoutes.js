@@ -45,4 +45,19 @@ actionRoutes.post('/:id', validateId, validateAction, async (req, res) => {
     }
   })
 
+  actionRoutes.delete('/:id', validateId, async (req, res) => {
+    const item = await Action.get(req.params.id);
+    try {
+        if(item) {
+            const action = await Project.remove(req.params.id);
+            res.status(200).json({message: "This action has been deleted successfully",  action: item })
+        } else {
+            res.status(404).json({ message: `The action with the specified ID ${req.params.id} does not exist.` })
+        }
+    } catch(error) {
+        res.status(500).json({ error: "The action could not be removed" })
+    }
+
+})
+
 export default actionRoutes;
