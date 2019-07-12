@@ -2,9 +2,8 @@ const validateAction = (req, res, next) => {
     const { id } = req.body;
     const { description, notes, completed } = req.body;
     const action = {
-      id,
-      notes,
       description,
+      notes,
       completed
     };
     if (typeof action.notes === "undefined" || typeof action.description === "undefined" || typeof action.completed === "undefined") {
@@ -14,7 +13,7 @@ const validateAction = (req, res, next) => {
           errorMessage: "Please provide name, description and completed as keys, with values for the new action."
         });
     }
-    if (action.name.trim() === "" || action.description.trim() === "" || action.completed.trim() === "") {
+    if (action.description.trim() === "" || action.notes.trim() === ""  || action.completed.trim() === "") {
       return res
         .status(404)
         .json({ errorMessage: "Please provide value for the new action." });
