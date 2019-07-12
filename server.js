@@ -10,7 +10,7 @@ server.use(express.json());
 // server.use('/api', routes);
 
 server.get('/', (req, res) => {
-  res.send(`<h2>Welcome to Projects & Actions API</h2>`)
+  res.json(`<h2>Welcome to Projects & Actions API</h2>`)
 });
 
 
