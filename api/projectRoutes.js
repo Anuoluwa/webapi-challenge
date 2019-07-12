@@ -1,11 +1,11 @@
 import express from "express";
 import Project from "../data/helpers/projectModel";
-// import validateId from '../middlewares/validateId';
+import validateId from '../middlewares/validateId';
 import validateProject from "../middlewares/validateProject";
 
 const projectRoutes = express.Router();
 
-projectRoutes.get("/:id", async (req, res) => {
+projectRoutes.get("/:id", validateId, async (req, res) => {
   const project = await Project.get(req.params.id);
 
   try {
@@ -46,5 +46,28 @@ projectRoutes.post("/", validateProject, (req, res) => {
         .json({ error: "The users information could not be created." });
     });
 });
+
+
+projectRoutes.get("/:id/actions", validateId, async (req, res) => {
+    const project = await Project.getProjectActions(req.params.id);
+  
+    try {
+      if (project) {
+        res.status(200).json({message: "Project with their actions, successfully retrieved", project});
+      } else {
+        res
+          .status(404)
+          .json({
+            message: `The project with the specified id:${
+              req.params.id
+            } does not exist.`
+          });
+      }
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "The project information could not be retrieved." });
+    }
+  });
 
 export default projectRoutes;
